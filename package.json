@@ -1,0 +1,26 @@
+{
+  "name": "learn-sequelize",
+  "version": "1.0.0",
+  "description": "Learn sequelize",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/choice91/learn-sequelize.git"
+  },
+  "author": "LST",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/choice91/learn-sequelize/issues"
+  },
+  "homepage": "https://github.com/choice91/learn-sequelize#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
