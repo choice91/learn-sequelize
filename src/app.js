@@ -1,10 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
 
+// Models
+const { sequelize } = require("../models/index.js");
+
+// Routers
+const rootRouter = require("../routes/rootRouter.js");
+const postRouter = require("../routes/postRouter.js");
+
 const app = express();
 const logger = morgan("dev");
-
-const { sequelize } = require("../models/index.js");
 
 app.set("port", process.env.PORT || 4000);
 
@@ -19,9 +24,8 @@ sequelize
 
 app.use(logger);
 
-app.use("/", (req, res) => {
-  return res.send("Hello");
-});
+app.use("/", rootRouter);
+app.use("/post", postRouter);
 
 app.listen(app.get("port"), () => {
   console.log(`✅ Server listening on http://localhost:${app.get("port")} 👈`);
