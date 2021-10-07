@@ -1,11 +1,10 @@
 const Post = require("../models/post.js");
 
-const getPosts = async (req, res) => {
-  const result = await Post.findAll({});
-  console.log(result);
-  return res.send("Get posts");
+const getPostList = async (req, res) => {
+  const postData = await Post.findAll({ order: [["created_at", "desc"]] });
+  return res.json(postData);
 };
 
 module.exports = {
-  getPosts,
+  getPostList,
 };

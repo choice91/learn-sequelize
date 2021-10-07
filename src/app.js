@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 // Models
 const { sequelize } = require("../models/index.js");
@@ -19,10 +20,14 @@ sequelize
     console.log("✅ DB 연결 성공 😊");
   })
   .catch((err) => {
+    console.log("❗ DB 연결 실패 😱");
     console.error(err);
   });
 
+app.use(cors());
 app.use(logger);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/", rootRouter);
 app.use("/post", postRouter);
