@@ -2,20 +2,30 @@ const Post = require("../models/post.js");
 
 const postUpload = async (req, res) => {
   const { title, content } = req.body;
-  await Post.create({
-    title,
-    content,
-  });
-  return res.sendStatus(200);
+  try {
+    await Post.create({
+      title,
+      content,
+    });
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
 };
 
 const getPostDetail = async (req, res) => {
   const { id } = req.params;
-  const { dataValues } = await Post.findOne({
-    where: { id: id },
-  });
-  const data = { detailData: dataValues };
-  return res.json(data);
+  try {
+    const { dataValues } = await Post.findOne({
+      where: { id: id },
+    });
+    const data = { detailData: dataValues };
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
 };
 
 const postPostUpdate = async (req, res) => {
@@ -23,17 +33,26 @@ const postPostUpdate = async (req, res) => {
     params: { id },
     body: { title, content },
   } = req;
-  await Post.update({ title, content }, { where: { id: id } });
-  return res.end();
+  try {
+    await Post.update({ title, content }, { where: { id: id } });
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
 };
 
 const getPostDelete = async (req, res) => {
   const { id } = req.params;
-  const result = await Post.destroy({
-    where: { id: id },
-  });
-  const code = result === 1 ? 200 : 202;
-  return res.sendStatus(code);
+  try {
+    await Post.destroy({
+      where: { id: id },
+    });
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
 };
 
 module.exports = {
