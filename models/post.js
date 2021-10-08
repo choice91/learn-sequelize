@@ -19,6 +19,8 @@ module.exports = class Post extends Sequelize.Model {
         underscored: true,
         modelName: "Post",
         tableName: "posts",
+        charset: "utf8mb4",
+        collate: "utf8mb4_general_ci",
       }
     );
   }
