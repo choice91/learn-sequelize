@@ -1,7 +1,7 @@
 const express = require("express");
 
 // Controllers
-const { getPostList } = require("../controllers/rootController.js");
+const { getPostList } = require("../controllers/postController");
 
 const router = express.Router();
 

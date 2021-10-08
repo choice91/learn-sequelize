@@ -3,11 +3,12 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 // Models
-const { sequelize } = require("../models/index.js");
+const { sequelize } = require("../models/index");
 
 // Routers
-const rootRouter = require("../routes/rootRouter.js");
-const postRouter = require("../routes/postRouter.js");
+const rootRouter = require("../routes/rootRouter");
+const postRouter = require("../routes/postRouter");
+const userRouter = require("../routes/userRouter");
 
 const app = express();
 const logger = morgan("dev");
@@ -31,6 +32,7 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 app.listen(app.get("port"), () => {
   console.log(`✅ Server listening on http://localhost:${app.get("port")} 👈`);
