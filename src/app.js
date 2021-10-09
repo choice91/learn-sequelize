@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const session = require("express-session");
 
 // Models
 const { sequelize } = require("../models/index");
@@ -24,7 +25,13 @@ sequelize
     console.log("❗ DB 연결 실패 😱");
     console.error(err);
   });
-
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 app.use(cors());
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
