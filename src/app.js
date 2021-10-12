@@ -2,6 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
 
 // Models
 const { sequelize } = require("../models/index");
@@ -10,6 +12,8 @@ const { sequelize } = require("../models/index");
 const rootRouter = require("../routes/rootRouter");
 const postRouter = require("../routes/postRouter");
 const userRouter = require("../routes/userRouter");
+
+const passportConfig = require("../passport/index");
 
 const app = express();
 const logger = morgan("dev");
@@ -25,17 +29,31 @@ sequelize
     console.log("❗ DB 연결 실패 😱");
     console.error(err);
   });
+passportConfig();
+
 app.use(
-  session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true,
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 );
-app.use(cors());
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: "secret_key",
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser("secret_key"));
 
 app.use("/", rootRouter);
 app.use("/post", postRouter);

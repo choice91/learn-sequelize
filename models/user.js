@@ -17,7 +17,7 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(10),
           allowNull: false,
         },
-        member_since: {
+        memberSince: {
           type: Sequelize.DATE,
           allowNull: false,
           defaultValue: sequelize.literal("now()"),
@@ -26,7 +26,7 @@ module.exports = class User extends Sequelize.Model {
       {
         sequelize,
         timestamps: false,
-        underscored: true,
+        underscored: false,
         modelName: "User",
         tableName: "users",
         charset: "utf8",
@@ -35,5 +35,7 @@ module.exports = class User extends Sequelize.Model {
     );
   }
 
-  static associate(db) {}
+  static associate(db) {
+    db.User.hasMany(db.Post);
+  }
 };

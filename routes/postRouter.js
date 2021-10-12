@@ -6,12 +6,15 @@ const {
   getPostDetail,
   getPostDelete,
   postPostUpdate,
-} = require("../controllers/postController.js");
+} = require("../controllers/postController");
+
+// Middleware
+const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
 // URL: /post
-router.post("/upload", postUpload);
+router.post("/upload", isLoggedIn, postUpload);
 router.post("/:id/update", postPostUpdate);
 router.get("/:id/delete", getPostDelete);
 router.get("/:id", getPostDetail);

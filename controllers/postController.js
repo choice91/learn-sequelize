@@ -1,10 +1,11 @@
 const Post = require("../models/post.js");
+const User = require("../models/user.js");
 
-const getPostList = async (req, res) => {
+exports.getPostList = async (req, res) => {
   try {
     const postData = await Post.findAll({
-      attributes: ["id", "title", "created_at"],
-      order: [["created_at", "desc"]],
+      attributes: ["id", "title", "createdAt"],
+      order: [["createdAt", "desc"]],
     });
     return res.status(200).json(postData);
   } catch (error) {
@@ -13,12 +14,14 @@ const getPostList = async (req, res) => {
   }
 };
 
-const postUpload = async (req, res) => {
+exports.postUpload = async (req, res) => {
   const { title, content } = req.body;
+  const { id } = req.user;
   try {
     await Post.create({
       title,
       content,
+      UserId: id,
     });
     return res.sendStatus(200);
   } catch (error) {
@@ -27,13 +30,25 @@ const postUpload = async (req, res) => {
   }
 };
 
-const getPostDetail = async (req, res) => {
+exports.getPostDetail = async (req, res) => {
   const { id } = req.params;
   try {
-    const { dataValues } = await Post.findOne({
+    const post = await Post.findOne({
       where: { id: id },
     });
-    const data = { detailData: dataValues };
+    const { title, content, createdAt } = post.dataValues;
+    const { UserId } = post.dataValues;
+    const user = await User.findOne({ where: { id: UserId } });
+    const { username } = user.dataValues;
+    const data = {
+      detailData: {
+        id: post.dataValues.id,
+        title,
+        content,
+        createdAt,
+        username,
+      },
+    };
     return res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -41,7 +56,7 @@ const getPostDetail = async (req, res) => {
   }
 };
 
-const postPostUpdate = async (req, res) => {
+exports.postPostUpdate = async (req, res) => {
   const {
     params: { id },
     body: { title, content },
@@ -55,7 +70,7 @@ const postPostUpdate = async (req, res) => {
   }
 };
 
-const getPostDelete = async (req, res) => {
+exports.getPostDelete = async (req, res) => {
   const { id } = req.params;
   try {
     await Post.destroy({
@@ -66,12 +81,4 @@ const getPostDelete = async (req, res) => {
     console.log(error);
     return res.status(400).json(error);
   }
-};
-
-module.exports = {
-  getPostList,
-  postUpload,
-  getPostDetail,
-  getPostDelete,
-  postPostUpdate,
 };
