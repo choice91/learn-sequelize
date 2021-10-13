@@ -61,9 +61,17 @@ exports.postPostUpdate = async (req, res) => {
     params: { id },
     body: { title, content },
   } = req;
+  // req.decoded에 저장된 token의 payload
+  const loggedInUserId = req.decoded.uid;
   try {
-    await Post.update({ title, content }, { where: { id: id } });
-    return res.sendStatus(200);
+    // Post모델에서 req.params에 있는 id로 데이터 검색
+    const post = await Post.findOne({ where: { id } });
+    // post.UserId와 loggedInUserId가 같으면 작성된 글과 로그인한 사람이 같은 사람
+    if (post.UserId === loggedInUserId) {
+      await Post.update({ title, content }, { where: { id: id } });
+      return res.status(200).json({ ok: true, message: "Update success" });
+    }
+    return res.status(403).json({ ok: false, message: "Update fail" });
   } catch (error) {
     console.log(error);
     return res.status(400).json(error);

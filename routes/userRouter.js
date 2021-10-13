@@ -7,11 +7,14 @@ const {
   logout,
 } = require("../controllers/userController");
 
+// Middlewares
+const { isLoggedIn, isNotLoggedIn } = require("../middlewares/loginCheck");
+
 const router = express.Router();
 
 // URL: /user
-router.post("/join", postJoin);
-router.post("/login", postLogin);
-router.post("/logout", logout);
+router.post("/join", isNotLoggedIn, postJoin);
+router.post("/login", isNotLoggedIn, postLogin);
+router.post("/logout", isLoggedIn, logout);
 
 module.exports = router;

@@ -40,11 +40,11 @@ exports.postLogin = async (req, res, next) => {
       };
       const options = { expiresIn: "1h" };
       const token = jwt.sign(payload, "secretKey", options);
-      const expiryDate = new Date(Date.now() + 1000 * 60 * 60 * 10);
-      res.cookie("accessToken", token, {
-        expires: expiryDate,
-        httpOnly: true,
-      });
+      // const expiryDate = new Date(Date.now() + 1000 * 60 * 60 * 10);
+      // res.cookie("accessToken", token, {
+      //   expires: expiryDate,
+      //   httpOnly: true,
+      // });
       return res.status(200).json({ token });
     });
   })(req, res, next);
